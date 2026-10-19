@@ -8,15 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.medicinesafetychecker.core.DosageChecker;
 import com.medicinesafetychecker.core.Medicine;
+import com.medicinesafetychecker.core.OverdoseRiskException;
 
 @RestController
 @RequestMapping("/api/medicines")
 public class MedicineController {
 
     private final MedicineRepository medicineRepository;
-    private final DosageChecker dosageChecker = new DosageChecker();
 
     public MedicineController(MedicineRepository medicineRepository) {
         this.medicineRepository = medicineRepository;
@@ -27,12 +26,18 @@ public class MedicineController {
         return medicineRepository.findAll();
     }
 
-    /** GET /api/medicines/{id}/dosage-check?doseMg=650 */
+    /** GET /api/medicines/{id}/dosage-check?doseMg=650&timesPerDay=3 */
     @GetMapping("/{id}/dosage-check")
-    public boolean isDosageSafe(@PathVariable String id, @RequestParam double doseMg) {
+    public boolean isDosageSafe(@PathVariable String id, @RequestParam double doseMg,
+                                 @RequestParam int timesPerDay) {
         Medicine medicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown medicine id: " + id))
                 .toDomain();
-        return dosageChecker.isDosageSafe(medicine, doseMg);
+        try {
+            medicine.validateDose(doseMg, timesPerDay);
+            return true;
+        } catch (OverdoseRiskException e) {
+            return false;
+        }
     }
 }

@@ -3,11 +3,15 @@ package com.medicinesafetychecker.backend;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.medicinesafetychecker.core.Antibiotic;
+import com.medicinesafetychecker.core.Antihypertensive;
 import com.medicinesafetychecker.core.Medicine;
+import com.medicinesafetychecker.core.Painkiller;
 
 /**
  * MongoDB-mapped version of {@link Medicine}. Kept separate from the core
- * domain class so that core stays free of persistence annotations.
+ * domain classes so that core stays free of persistence annotations.
+ * {@code type} records which Medicine subclass this document represents.
  */
 @Document(collection = "medicines")
 public class MedicineDocument {
@@ -15,24 +19,30 @@ public class MedicineDocument {
     @Id
     private String id;
     private String name;
-    private String genericName;
-    private double minSafeDosageMg;
-    private double maxSafeDosageMg;
+    private MedicineType type;
+    private String dosageUnit;
+    private double maxSingleDose;
+    private double maxDailyDose;
 
     public MedicineDocument() {
     }
 
-    public MedicineDocument(String id, String name, String genericName,
-                             double minSafeDosageMg, double maxSafeDosageMg) {
+    public MedicineDocument(String id, String name, MedicineType type, String dosageUnit,
+                             double maxSingleDose, double maxDailyDose) {
         this.id = id;
         this.name = name;
-        this.genericName = genericName;
-        this.minSafeDosageMg = minSafeDosageMg;
-        this.maxSafeDosageMg = maxSafeDosageMg;
+        this.type = type;
+        this.dosageUnit = dosageUnit;
+        this.maxSingleDose = maxSingleDose;
+        this.maxDailyDose = maxDailyDose;
     }
 
     public Medicine toDomain() {
-        return new Medicine(id, name, genericName, minSafeDosageMg, maxSafeDosageMg);
+        return switch (type) {
+            case ANTIBIOTIC -> new Antibiotic(id, name, dosageUnit, maxSingleDose, maxDailyDose);
+            case PAINKILLER -> new Painkiller(id, name, dosageUnit, maxSingleDose, maxDailyDose);
+            case ANTIHYPERTENSIVE -> new Antihypertensive(id, name, dosageUnit, maxSingleDose, maxDailyDose);
+        };
     }
 
     public String getId() {
@@ -51,27 +61,35 @@ public class MedicineDocument {
         this.name = name;
     }
 
-    public String getGenericName() {
-        return genericName;
+    public MedicineType getType() {
+        return type;
     }
 
-    public void setGenericName(String genericName) {
-        this.genericName = genericName;
+    public void setType(MedicineType type) {
+        this.type = type;
     }
 
-    public double getMinSafeDosageMg() {
-        return minSafeDosageMg;
+    public String getDosageUnit() {
+        return dosageUnit;
     }
 
-    public void setMinSafeDosageMg(double minSafeDosageMg) {
-        this.minSafeDosageMg = minSafeDosageMg;
+    public void setDosageUnit(String dosageUnit) {
+        this.dosageUnit = dosageUnit;
     }
 
-    public double getMaxSafeDosageMg() {
-        return maxSafeDosageMg;
+    public double getMaxSingleDose() {
+        return maxSingleDose;
     }
 
-    public void setMaxSafeDosageMg(double maxSafeDosageMg) {
-        this.maxSafeDosageMg = maxSafeDosageMg;
+    public void setMaxSingleDose(double maxSingleDose) {
+        this.maxSingleDose = maxSingleDose;
+    }
+
+    public double getMaxDailyDose() {
+        return maxDailyDose;
+    }
+
+    public void setMaxDailyDose(double maxDailyDose) {
+        this.maxDailyDose = maxDailyDose;
     }
 }

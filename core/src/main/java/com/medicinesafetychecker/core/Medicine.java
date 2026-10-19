@@ -1,28 +1,51 @@
 package com.medicinesafetychecker.core;
 
+import java.util.List;
+
 /**
- * A medicine and the dosage range that is considered safe for an adult.
- * Plain OOP class - no framework annotations, so it can be reused by both
- * the backend and the desktop module without pulling in Spring or JavaFX.
+ * A medicine with the dosage limits needed to judge whether a given dose is
+ * safe. Subclasses supply their own {@link #validateDose} rule.
  */
-public class Medicine {
+public abstract class Medicine implements InteractionCheckable {
+
+    /** Known dangerous combinations, looked up by medicine name in {@link #checkConflict}. */
+    private static final List<Interaction> KNOWN_INTERACTIONS = List.of(
+            new Interaction("Aspirin", "Lisinopril", Severity.MODERATE,
+                    "NSAIDs may reduce the blood-pressure-lowering effect of ACE inhibitors"),
+            new Interaction("Ibuprofen", "Lisinopril", Severity.MODERATE,
+                    "NSAIDs may reduce the blood-pressure-lowering effect of ACE inhibitors"),
+            new Interaction("Warfarin", "Aspirin", Severity.SEVERE,
+                    "Combined use significantly increases bleeding risk")
+    );
 
     private final String id;
     private final String name;
-    private final String genericName;
-    private final double minSafeDosageMg;
-    private final double maxSafeDosageMg;
+    private final String dosageUnit;
+    private final double maxSingleDose;
+    private final double maxDailyDose;
 
-    public Medicine(String id, String name, String genericName,
-                     double minSafeDosageMg, double maxSafeDosageMg) {
-        if (minSafeDosageMg < 0 || maxSafeDosageMg < minSafeDosageMg) {
-            throw new IllegalArgumentException("Invalid safe dosage range");
+    protected Medicine(String id, String name, String dosageUnit,
+                        double maxSingleDose, double maxDailyDose) {
+        if (maxSingleDose < 0 || maxDailyDose < maxSingleDose) {
+            throw new IllegalArgumentException("Invalid dosage limits");
         }
         this.id = id;
         this.name = name;
-        this.genericName = genericName;
-        this.minSafeDosageMg = minSafeDosageMg;
-        this.maxSafeDosageMg = maxSafeDosageMg;
+        this.dosageUnit = dosageUnit;
+        this.maxSingleDose = maxSingleDose;
+        this.maxDailyDose = maxDailyDose;
+    }
+
+    /** Checks whether taking {@code dose} {@code timesPerDay} times a day is safe for this medicine. */
+    public abstract void validateDose(double dose, int timesPerDay) throws OverdoseRiskException;
+
+    @Override
+    public void checkConflict(Medicine other) throws DangerousCombinationException {
+        for (Interaction interaction : KNOWN_INTERACTIONS) {
+            if (interaction.involves(this.name, other.name)) {
+                throw new DangerousCombinationException(this, other, interaction.getSeverity(), interaction.getDescription());
+            }
+        }
     }
 
     public String getId() {
@@ -33,15 +56,15 @@ public class Medicine {
         return name;
     }
 
-    public String getGenericName() {
-        return genericName;
+    public String getDosageUnit() {
+        return dosageUnit;
     }
 
-    public double getMinSafeDosageMg() {
-        return minSafeDosageMg;
+    public double getMaxSingleDose() {
+        return maxSingleDose;
     }
 
-    public double getMaxSafeDosageMg() {
-        return maxSafeDosageMg;
+    public double getMaxDailyDose() {
+        return maxDailyDose;
     }
 }
