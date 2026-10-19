@@ -15,7 +15,7 @@ Naproxen,Hydrochlorothiazide,MODERATE,The therapeutic efficacy of Hydrochlorothi
 Ibuprofen,Hydrochlorothiazide,MODERATE,The therapeutic efficacy of Hydrochlorothiazide can be decreased when used in combination with Ibuprofen.
 Diclofenac,Hydrochlorothiazide,MODERATE,The therapeutic efficacy of Hydrochlorothiazide can be decreased when used in combination with Diclofenac.
 Tramadol,Hydrochlorothiazide,MODERATE,The risk or severity of adverse effects can be increased when Tramadol is combined with Hydrochlorothiazide.
-Candesartan,Hydrochlorothiazide,MAJOR,The risk or severity of hypotension can be increased when Candesartan cilexetil is combined with Hydrochlorothiazide.
+Candesartan,Hydrochlorothiazide,MODERATE,The risk or severity of hypotension can be increased when Candesartan cilexetil is combined with Hydrochlorothiazide.
 Amlodipine,Hydrochlorothiazide,MODERATE,The risk or severity of adverse effects can be increased when Amlodipine is combined with Hydrochlorothiazide.
 Lisinopril,Hydrochlorothiazide,MODERATE,The risk or severity of adverse effects can be increased when Lisinopril is combined with Hydrochlorothiazide.
 Enalapril,Hydrochlorothiazide,MODERATE,The risk or severity of adverse effects can be increased when Enalapril is combined with Hydrochlorothiazide.
@@ -48,7 +48,7 @@ Diclofenac,Ibuprofen,MODERATE,The risk or severity of adverse effects can be inc
 Candesartan,Ibuprofen,MODERATE,The risk or severity of adverse effects can be increased when Candesartan cilexetil is combined with Ibuprofen.
 Lisinopril,Ibuprofen,MODERATE,The risk or severity of adverse effects can be increased when Lisinopril is combined with Ibuprofen.
 Enalapril,Ibuprofen,MODERATE,The risk or severity of adverse effects can be increased when Enalapril is combined with Ibuprofen.
-Ciprofloxacin,Valsartan,MINOR,Ciprofloxacin may increase the arrhythmogenic activities of Valsartan.
+Ciprofloxacin,Valsartan,MAJOR,Ciprofloxacin may increase the arrhythmogenic activities of Valsartan.
 Hydrochlorothiazide,Valsartan,MINOR,Hydrochlorothiazide may increase the hypotensive activities of Valsartan.
 Aspirin,Valsartan,MINOR,The metabolism of Valsartan can be decreased when combined with Acetylsalicylic acid.
 Celecoxib,Valsartan,MINOR,The metabolism of Valsartan can be decreased when combined with Celecoxib.
@@ -62,7 +62,7 @@ Cephalexin,Metoprolol,MINOR,The metabolism of Metoprolol can be decreased when c
 Paracetamol,Metoprolol,MINOR,The metabolism of Metoprolol can be decreased when combined with Acetaminophen.
 Atenolol,Losartan,MODERATE,The risk or severity of adverse effects can be increased when Atenolol is combined with Losartan.
 Metoprolol,Losartan,MODERATE,The risk or severity of adverse effects can be increased when Metoprolol is combined with Losartan.
-Ciprofloxacin,Losartan,MINOR,Ciprofloxacin may increase the arrhythmogenic activities of Losartan.
+Ciprofloxacin,Losartan,MAJOR,Ciprofloxacin may increase the arrhythmogenic activities of Losartan.
 Aspirin,Losartan,MINOR,The metabolism of Losartan can be decreased when combined with Acetylsalicylic acid.
 Celecoxib,Losartan,MINOR,The metabolism of Losartan can be decreased when combined with Celecoxib.
 Naproxen,Losartan,MINOR,The metabolism of Losartan can be decreased when combined with Naproxen.
@@ -84,10 +84,10 @@ Lisinopril,Celecoxib,MODERATE,The risk or severity of adverse effects can be inc
 Enalapril,Celecoxib,MODERATE,The risk or severity of adverse effects can be increased when Enalapril is combined with Celecoxib.
 Cephalexin,Celecoxib,MINOR,The metabolism of Celecoxib can be decreased when combined with Cephalexin.
 Paracetamol,Celecoxib,MINOR,The metabolism of Celecoxib can be decreased when combined with Acetaminophen.
-Levofloxacin,Ciprofloxacin,MINOR,Levofloxacin may increase the QTc-prolonging activities of Ciprofloxacin.
+Levofloxacin,Ciprofloxacin,MAJOR,Levofloxacin may increase the QTc-prolonging activities of Ciprofloxacin.
 Atenolol,Lisinopril,MODERATE,The risk or severity of adverse effects can be increased when Atenolol is combined with Lisinopril.
 Metoprolol,Lisinopril,MODERATE,The risk or severity of adverse effects can be increased when Metoprolol is combined with Lisinopril.
-Ciprofloxacin,Lisinopril,MINOR,Ciprofloxacin may increase the arrhythmogenic activities of Lisinopril.
+Ciprofloxacin,Lisinopril,MAJOR,Ciprofloxacin may increase the arrhythmogenic activities of Lisinopril.
 Candesartan,Lisinopril,MODERATE,The risk or severity of adverse effects can be increased when Candesartan cilexetil is combined with Lisinopril.
 Valsartan,Lisinopril,MODERATE,The risk or severity of adverse effects can be increased when Valsartan is combined with Lisinopril.
 Amlodipine,Lisinopril,MODERATE,The risk or severity of adverse effects can be increased when Amlodipine is combined with Lisinopril.
@@ -95,13 +95,13 @@ Enalapril,Lisinopril,MODERATE,The risk or severity of adverse effects can be inc
 Losartan,Lisinopril,MODERATE,The risk or severity of adverse effects can be increased when Losartan is combined with Lisinopril.
 Atenolol,Enalapril,MODERATE,The risk or severity of adverse effects can be increased when Atenolol is combined with Enalapril.
 Metoprolol,Enalapril,MODERATE,The risk or severity of adverse effects can be increased when Metoprolol is combined with Enalapril.
-Ciprofloxacin,Enalapril,MINOR,Ciprofloxacin may increase the arrhythmogenic activities of Enalapril.
+Ciprofloxacin,Enalapril,MAJOR,Ciprofloxacin may increase the arrhythmogenic activities of Enalapril.
 Valsartan,Enalapril,MODERATE,The risk or severity of adverse effects can be increased when Valsartan is combined with Enalapril.
 Amlodipine,Enalapril,MODERATE,The risk or severity of adverse effects can be increased when Amlodipine is combined with Enalapril.
 Losartan,Enalapril,MODERATE,The risk or severity of adverse effects can be increased when Losartan is combined with Enalapril.
 Atenolol,Candesartan,MODERATE,The risk or severity of adverse effects can be increased when Atenolol is combined with Candesartan cilexetil.
 Metoprolol,Candesartan,MODERATE,The risk or severity of adverse effects can be increased when Metoprolol is combined with Candesartan cilexetil.
-Ciprofloxacin,Candesartan,MINOR,Ciprofloxacin may increase the arrhythmogenic activities of Candesartan cilexetil.
+Ciprofloxacin,Candesartan,MAJOR,Ciprofloxacin may increase the arrhythmogenic activities of Candesartan cilexetil.
 Valsartan,Candesartan,MODERATE,The risk or severity of adverse effects can be increased when Valsartan is combined with Candesartan cilexetil.
 Amlodipine,Candesartan,MODERATE,The risk or severity of adverse effects can be increased when Amlodipine is combined with Candesartan cilexetil.
 Enalapril,Candesartan,MINOR,The serum concentration of Candesartan cilexetil can be increased when it is combined with Enalapril.
@@ -113,14 +113,14 @@ Metoprolol,Atenolol,MODERATE,The risk or severity of adverse effects can be incr
 Valsartan,Atenolol,MODERATE,The risk or severity of adverse effects can be increased when Valsartan is combined with Atenolol.
 Metoprolol,Tramadol,MINOR,The serum concentration of Tramadol can be increased when it is combined with Metoprolol.
 Celecoxib,Tramadol,MODERATE,The therapeutic efficacy of Tramadol can be decreased when used in combination with Celecoxib.
-Ciprofloxacin,Azithromycin,MINOR,Ciprofloxacin may increase the QTc-prolonging activities of Azithromycin.
-Levofloxacin,Azithromycin,MINOR,Levofloxacin may increase the QTc-prolonging activities of Azithromycin.
+Ciprofloxacin,Azithromycin,MAJOR,Ciprofloxacin may increase the QTc-prolonging activities of Azithromycin.
+Levofloxacin,Azithromycin,MAJOR,Levofloxacin may increase the QTc-prolonging activities of Azithromycin.
 Naproxen,Azithromycin,MINOR,The metabolism of Azithromycin can be decreased when combined with Naproxen.
 Diclofenac,Azithromycin,MINOR,The metabolism of Azithromycin can be decreased when combined with Diclofenac.
 Paracetamol,Azithromycin,MINOR,The metabolism of Azithromycin can be decreased when combined with Acetaminophen.
-Ciprofloxacin,Metronidazole,MINOR,Ciprofloxacin may increase the QTc-prolonging activities of Metronidazole.
-Levofloxacin,Metronidazole,MINOR,Levofloxacin may increase the QTc-prolonging activities of Metronidazole.
-Azithromycin,Metronidazole,MINOR,Azithromycin may increase the QTc-prolonging activities of Metronidazole.
+Ciprofloxacin,Metronidazole,MAJOR,Ciprofloxacin may increase the QTc-prolonging activities of Metronidazole.
+Levofloxacin,Metronidazole,MAJOR,Levofloxacin may increase the QTc-prolonging activities of Metronidazole.
+Azithromycin,Metronidazole,MAJOR,Azithromycin may increase the QTc-prolonging activities of Metronidazole.
 Atenolol,Diclofenac,MINOR,Atenolol may decrease the antihypertensive activities of Diclofenac.
 Metoprolol,Diclofenac,MINOR,Metoprolol may decrease the antihypertensive activities of Diclofenac.
 Candesartan,Diclofenac,MODERATE,The risk or severity of adverse effects can be increased when Candesartan cilexetil is combined with Diclofenac.

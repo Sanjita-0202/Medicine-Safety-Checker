@@ -36,14 +36,23 @@ public final class InteractionCsvBuilder {
             "candesartan cilexetil", "Candesartan"
     );
 
+    // "hypotension" is deliberately NOT a MAJOR keyword: in this dataset it almost
+    // always describes the expected, additive blood-pressure-lowering effect of
+    // combining two antihypertensives (e.g. an ARB + a thiazide diuretic) - a
+    // routine, often intentionally co-prescribed combination, not a severe one.
+    // "qtc" and "arrhythm" are kept as word-root prefixes (rather than full words
+    // like "qtc prolongation" or "arrhythmia") because this dataset phrases them
+    // as "QTc-prolonging" and "arrhythmogenic" - a literal keyword match on the
+    // textbook wording misses the actual descriptions and under-classifies real
+    // QT-prolongation / arrhythmia risk combinations as MINOR.
     private static final String[] MAJOR_KEYWORDS = {
-            "bleeding", "qtc prolongation", "hypotension", "heart failure",
+            "bleeding", "qtc", "arrhythm", "heart failure",
             "hyperkalemia", "respiratory depression", "serotonin syndrome",
-            "arrhythmia", "seizure", "toxicity", "fatal", "life-threatening"
+            "seizure", "toxicity", "fatal", "life-threatening"
     };
 
     private static final String[] MODERATE_KEYWORDS = {
-            "adverse effects", "hypersensitivity", "efficacy", "hypertension"
+            "adverse effects", "hypersensitivity", "efficacy", "hypertension", "hypotension"
     };
 
     private InteractionCsvBuilder() {
