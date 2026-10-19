@@ -10,8 +10,12 @@ dosages and known drug-drug interactions.
   No framework dependencies; this is the module to point at when explaining
   the OOP design in the viva.
 - `backend` — Spring Boot REST API + Spring Data MongoDB. Depends on `core`.
-- `desktop` — JavaFX client UI. Depends on `core`, talks to `backend` over
-  HTTP.
+  The UI is **JSP + Servlets**: `PrescriptionServlet` is a plain
+  `@WebServlet` (registered via `@ServletComponentScan`, not a Spring
+  `@Controller`), so the servlet code is clearly visible for the viva. It
+  forwards to JSP pages (using JSTL, no scriptlets) under
+  `src/main/resources/META-INF/resources/WEB-INF/jsp/`. The JSON REST
+  endpoints under `/api/...` still exist alongside it.
 - **MongoDB Atlas** for persistence.
 - Source data: Kaggle CSVs (drug interactions dataset), see `data/`.
 - **JUnit 5** for tests.
@@ -20,9 +24,9 @@ dosages and known drug-drug interactions.
 
 ```
 pom.xml          parent POM (aggregator, dependency management)
-core/            domain model + unit tests, no Spring/JavaFX deps
-backend/         Spring Boot app, REST controllers, Mongo repositories
-desktop/         JavaFX app, calls backend REST API
+core/            domain model + unit tests, no Spring/servlet deps
+backend/         Spring Boot app: REST controllers, Mongo repositories,
+                 PrescriptionServlet + JSP pages (the website UI)
 data/
   raw/           downloaded Kaggle CSVs — gitignored, not committed
   seed/          small cleaned/derived data files — committed
@@ -44,9 +48,10 @@ data/
 
 ```
 ./mvnw clean install      # build all modules
-./mvnw -pl backend spring-boot:run   # run the backend API
-./mvnw -pl desktop javafx:run        # run the JavaFX client
+./mvnw -pl backend spring-boot:run   # run the backend + website on http://localhost:8080
 ```
+
+Open `http://localhost:8080/check` in a browser for the website UI.
 
 ## Configuration
 
