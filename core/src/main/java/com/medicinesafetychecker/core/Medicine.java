@@ -8,15 +8,12 @@ import java.util.List;
  */
 public abstract class Medicine implements InteractionCheckable {
 
-    /** Known dangerous combinations, looked up by medicine name in {@link #checkConflict}. */
-    private static final List<Interaction> KNOWN_INTERACTIONS = List.of(
-            new Interaction("Aspirin", "Lisinopril", Severity.MODERATE,
-                    "NSAIDs may reduce the blood-pressure-lowering effect of ACE inhibitors"),
-            new Interaction("Ibuprofen", "Lisinopril", Severity.MODERATE,
-                    "NSAIDs may reduce the blood-pressure-lowering effect of ACE inhibitors"),
-            new Interaction("Warfarin", "Aspirin", Severity.SEVERE,
-                    "Combined use significantly increases bleeding risk")
-    );
+    /** Shared known-interactions database, queried by {@link #checkConflict}. */
+    private static final InteractionGraph KNOWN_INTERACTIONS = new InteractionGraph();
+
+    public static InteractionGraph getKnownInteractions() {
+        return KNOWN_INTERACTIONS;
+    }
 
     private final String id;
     private final String name;
@@ -41,11 +38,7 @@ public abstract class Medicine implements InteractionCheckable {
 
     @Override
     public void checkConflict(Medicine other) throws DangerousCombinationException {
-        for (Interaction interaction : KNOWN_INTERACTIONS) {
-            if (interaction.involves(this.name, other.name)) {
-                throw new DangerousCombinationException(this, other, interaction.getSeverity(), interaction.getDescription());
-            }
-        }
+        KNOWN_INTERACTIONS.checkPrescription(this, List.of(other));
     }
 
     public String getId() {
@@ -66,5 +59,23 @@ public abstract class Medicine implements InteractionCheckable {
 
     public double getMaxDailyDose() {
         return maxDailyDose;
+    }
+
+    // Equality is by id, not instance - the interaction graph may be checked
+    // against a freshly loaded Medicine object that represents the same drug.
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Medicine other)) {
+            return false;
+        }
+        return id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
