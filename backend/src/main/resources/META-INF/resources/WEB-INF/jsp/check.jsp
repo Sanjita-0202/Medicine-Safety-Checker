@@ -56,6 +56,8 @@
             <button type="submit">Check</button>
         </form>
     </div>
+
+    <a class="back-link" href="${pageContext.request.contextPath}/patients">View patients</a>
 </div>
 </body>
 </html>

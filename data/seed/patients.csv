@@ -1,0 +1,9 @@
+# DEMO DATA ONLY - 5 sample patients for the patient/prescription-history feature.
+# Columns: id,name,age,gender,weight,allergies,activeMedicines
+# allergies/activeMedicines may hold several values separated by "|"; leave the field blank for none.
+id,name,age,gender,weight,allergies,activeMedicines
+p1,Asha Mehta,34,F,62,Penicillin,Azithromycin
+p2,Ravi Kumar,58,M,78,,Losartan
+p3,Priya Nair,45,F,55,Sulfa drugs,
+p4,Vikram Singh,29,M,80,,Ibuprofen
+p5,Sunita Rao,67,F,60,Aspirin,Amlodipine
