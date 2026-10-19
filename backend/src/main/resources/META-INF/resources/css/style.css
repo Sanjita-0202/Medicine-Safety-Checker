@@ -1,0 +1,132 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f6f8;
+    color: #1f2933;
+    margin: 0;
+    padding: 2rem 1rem;
+}
+
+.page {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 1.6rem;
+    margin-bottom: 0.25rem;
+}
+
+.subtitle {
+    color: #52606d;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+}
+
+.card {
+    background: #ffffff;
+    border: 1px solid #d9e2ec;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.field {
+    margin-bottom: 1.1rem;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.35rem;
+}
+
+select, input[type="number"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #c3cdd5;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.checkbox-list {
+    border: 1px solid #c3cdd5;
+    border-radius: 4px;
+    padding: 0.75rem;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #fbfcfd;
+}
+
+.checkbox-list label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: normal;
+    margin-bottom: 0.4rem;
+}
+
+.checkbox-list input {
+    width: auto;
+}
+
+button {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1d4ed8;
+}
+
+.error-banner {
+    background-color: #fdecea;
+    border: 1px solid #f5a79e;
+    color: #8a1f12;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.25rem;
+}
+
+.panel {
+    padding: 1.25rem 1.5rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    margin-bottom: 1.25rem;
+}
+
+.panel h2 {
+    margin-top: 0;
+}
+
+.panel-safe {
+    background-color: #e6f4ea;
+    border-color: #a6d8b4;
+    color: #1e4620;
+}
+
+.panel-danger {
+    background-color: #fdecea;
+    border-color: #f5a79e;
+    color: #8a1f12;
+}
+
+.panel-warning {
+    background-color: #fff4e5;
+    border-color: #f6c177;
+    color: #7a4a00;
+}
+
+.detail-row {
+    margin: 0.25rem 0;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+}
