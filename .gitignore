@@ -37,3 +37,6 @@ application-*.local.properties
 # OS
 .DS_Store
 Thumbs.db
+
+# Raw Kaggle dataset — large, regenerable, downloaded separately (see README)
+data/raw/
