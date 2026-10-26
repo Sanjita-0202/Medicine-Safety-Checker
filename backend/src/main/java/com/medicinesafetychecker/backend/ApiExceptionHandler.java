@@ -20,6 +20,16 @@ import com.medicinesafetychecker.core.OverdoseRiskException;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
+    @ExceptionHandler(DataNotReadyException.class)
+    public ResponseEntity<ApiError> handleLoading(DataNotReadyException e) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(new ApiError("LOADING", e.getMessage()));
+    }
+
+    @ExceptionHandler(PatientNotFoundException.class)
+    public ResponseEntity<ApiError> handlePatientNotFound(PatientNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiError("UNKNOWN_PATIENT", e.getMessage()));
+    }
+
     @ExceptionHandler(UnknownMedicineException.class)
     public ResponseEntity<ApiError> handleUnknownMedicine(UnknownMedicineException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)

@@ -16,8 +16,10 @@ import com.medicinesafetychecker.core.OverdoseRiskException;
 public class MedicineController {
 
     private final MedicineRepository medicineRepository;
+    private final AuditLogger audit;
 
-    public MedicineController(MedicineRepository medicineRepository) {
+    public MedicineController(MedicineRepository medicineRepository, AuditLogger audit) {
+        this.audit = audit;
         this.medicineRepository = medicineRepository;
     }
 
@@ -30,14 +32,19 @@ public class MedicineController {
     @GetMapping("/{id}/dosage-check")
     public boolean isDosageSafe(@PathVariable String id, @RequestParam double doseMg,
                                  @RequestParam int timesPerDay) {
+        String outcome = "INVALID_INPUT";
+        try {
         Medicine medicine = medicineRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown medicine id: " + id))
                 .toDomain();
         try {
             medicine.validateDose(doseMg, timesPerDay);
+            outcome = "SAFE";
             return true;
         } catch (OverdoseRiskException e) {
+            outcome = "OVERDOSE_RISK";
             return false;
         }
+        } finally { audit.log(null, id, outcome); }
     }
 }

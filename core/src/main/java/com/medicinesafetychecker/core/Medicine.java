@@ -17,6 +17,7 @@ public abstract class Medicine implements InteractionCheckable {
 
     private final String id;
     private final String name;
+    private String drugClass;
     private final String dosageUnit;
     private final double maxSingleDose;
     private final double maxDailyDose;
@@ -43,6 +44,18 @@ public abstract class Medicine implements InteractionCheckable {
 
     public String getId() {
         return id;
+    }
+
+    public String getDrugClass() { return drugClass; }
+
+    public void setDrugClass(String drugClass) {
+        this.drugClass = drugClass == null ? null : drugClass.strip();
+    }
+
+    protected void validateInput(double dose, int timesPerDay) {
+        if (!Double.isFinite(dose) || dose <= 0 || timesPerDay <= 0) {
+            throw new IllegalArgumentException("Dose and times per day must be positive, finite numbers.");
+        }
     }
 
     public String getName() {

@@ -19,6 +19,7 @@ public class MedicineDocument {
     @Id
     private String id;
     private String name;
+    private String drugClass;
     private MedicineType type;
     private String dosageUnit;
     private double maxSingleDose;
@@ -38,12 +39,17 @@ public class MedicineDocument {
     }
 
     public Medicine toDomain() {
-        return switch (type) {
+        Medicine medicine = switch (type) {
             case ANTIBIOTIC -> new Antibiotic(id, name, dosageUnit, maxSingleDose, maxDailyDose);
             case PAINKILLER -> new Painkiller(id, name, dosageUnit, maxSingleDose, maxDailyDose);
             case ANTIHYPERTENSIVE -> new Antihypertensive(id, name, dosageUnit, maxSingleDose, maxDailyDose);
         };
+        medicine.setDrugClass(drugClass);
+        return medicine;
     }
+
+    public String getDrugClass() { return drugClass; }
+    public void setDrugClass(String drugClass) { this.drugClass = drugClass; }
 
     public String getId() {
         return id;

@@ -1,0 +1,3 @@
+# Manual overrides take precedence over keyword rules; pairs are unordered and case-insensitive.
+# Supported values: MAJOR/SEVERE, MODERATE, MINOR/LOW. Add reviewed rows below.
+medicineNameA,medicineNameB,severity

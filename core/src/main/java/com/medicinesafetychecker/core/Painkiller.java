@@ -16,6 +16,7 @@ public class Painkiller extends Medicine {
 
     @Override
     public void validateDose(double dose, int timesPerDay) throws OverdoseRiskException {
+        validateInput(dose, timesPerDay);
         if (dose > getMaxSingleDose()) {
             throw new OverdoseRiskException(this, dose, getMaxSingleDose());
         }

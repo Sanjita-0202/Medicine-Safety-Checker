@@ -27,6 +27,7 @@ public final class InteractionCsvBuilder {
 
     private static final Path DEFAULT_MEDICINES_CSV = Path.of("data/seed/medicines.csv");
     private static final Path DEFAULT_RAW_CSV = Path.of("data/raw/db_drug_interactions.csv");
+    private static final Path DEFAULT_OVERRIDES_CSV = Path.of("data/seed/severity_overrides.csv");
     private static final Path DEFAULT_OUTPUT_CSV = Path.of("data/seed/interactions.csv");
 
     // The Kaggle dataset uses DrugBank's chemical names for a few of our medicines.
@@ -64,7 +65,9 @@ public final class InteractionCsvBuilder {
         Path outputCsv = args.length > 2 ? Path.of(args[2]) : DEFAULT_OUTPUT_CSV;
 
         Map<String, String> canonicalNamesByLowerCase = loadCanonicalNames(medicinesCsv);
-        int written = buildInteractionsCsv(rawCsv, outputCsv, canonicalNamesByLowerCase);
+        Path overridesCsv = args.length > 3 ? Path.of(args[3]) : DEFAULT_OVERRIDES_CSV;
+        Map<String, String> overrides = loadOverrides(overridesCsv, canonicalNamesByLowerCase);
+        int written = buildInteractionsCsv(rawCsv, outputCsv, canonicalNamesByLowerCase, overrides);
 
         System.out.println("Wrote " + written + " interactions to " + outputCsv);
     }
@@ -79,7 +82,7 @@ public final class InteractionCsvBuilder {
         return names;
     }
 
-    private static int buildInteractionsCsv(Path rawCsv, Path outputCsv, Map<String, String> canonicalNamesByLowerCase)
+    private static int buildInteractionsCsv(Path rawCsv, Path outputCsv, Map<String, String> canonicalNamesByLowerCase, Map<String, String> overrides)
             throws IOException {
         int written = 0;
         Set<String> seenPairs = new HashSet<>();
@@ -110,7 +113,7 @@ public final class InteractionCsvBuilder {
                 }
 
                 String description = fields[2].strip();
-                String severity = classifySeverity(description);
+                String severity = overrides.getOrDefault(pairKey, classifySeverity(description));
 
                 writer.write(CsvLoader.escapeCsvField(canonicalA));
                 writer.write(',');
@@ -124,6 +127,28 @@ public final class InteractionCsvBuilder {
             }
         }
         return written;
+    }
+
+    private static Map<String, String> loadOverrides(Path path, Map<String, String> names) throws IOException {
+        Map<String, String> result = new HashMap<>();
+        if (!Files.exists(path)) { throw new IOException("Severity overrides file not found: " + path); }
+        boolean header = false;
+        for (String line : Files.readAllLines(path)) {
+            if (line.isBlank() || line.stripLeading().startsWith("#")) { continue; }
+            if (!header) { header = true; continue; }
+            String[] fields = CsvLoader.splitCsvLine(line);
+            if (fields.length != 3) { throw new IOException("Expected three override columns: " + line); }
+            String a = names.get(fields[0].strip().toLowerCase(Locale.ROOT));
+            String b = names.get(fields[1].strip().toLowerCase(Locale.ROOT));
+            String severity = fields[2].strip().toUpperCase(Locale.ROOT);
+            severity = switch (severity) { case "SEVERE" -> "MAJOR"; case "LOW" -> "MINOR"; default -> severity; };
+            if (a == null || b == null || !(severity.equals("MAJOR") || severity.equals("MODERATE") || severity.equals("MINOR"))) {
+                throw new IOException("Unknown medicine or invalid severity in override: " + line);
+            }
+            String previous = result.putIfAbsent(unorderedPairKey(a, b), severity);
+            if (previous != null && !previous.equals(severity)) { throw new IOException("Conflicting overrides: " + line); }
+        }
+        return result;
     }
 
     private static String unorderedPairKey(String a, String b) {

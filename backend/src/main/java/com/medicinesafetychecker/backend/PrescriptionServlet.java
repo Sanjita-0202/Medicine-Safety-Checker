@@ -1,126 +1,66 @@
 package com.medicinesafetychecker.backend;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
-import com.medicinesafetychecker.core.DangerousCombinationException;
-import com.medicinesafetychecker.core.Medicine;
-import com.medicinesafetychecker.core.OverdoseRiskException;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 
-/**
- * Plain Jakarta servlet (not a Spring @Controller) that drives the JSP UI at
- * /check. It is registered with the embedded container via
- * {@code @ServletComponentScan} on {@link BackendApplication}, so Spring
- * beans are fetched by hand in {@link #init()} rather than @Autowired.
- *
- * <p>It runs the same dose/interaction checks as
- * {@link PrescriptionController#checkPrescription}, just rendered as HTML
- * instead of JSON.
- */
 @WebServlet(name = "PrescriptionServlet", urlPatterns = "/check")
 public class PrescriptionServlet extends HttpServlet {
-
-    private static final String CHECK_JSP = "/WEB-INF/jsp/check.jsp";
-    private static final String RESULT_JSP = "/WEB-INF/jsp/result.jsp";
-
-    private MedicineRepository medicineRepository;
-    private InteractionGraphLoader interactionGraphLoader;
+    private MedicineRepository medicines;
+    private PrescriptionChecker checker;
+    private AuditLogger audit;
 
     @Override
     public void init() throws ServletException {
-        super.init();
-        WebApplicationContext context =
-                WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
-        this.medicineRepository = context.getBean(MedicineRepository.class);
-        this.interactionGraphLoader = context.getBean(InteractionGraphLoader.class);
+        var context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+        medicines = context.getBean(MedicineRepository.class);
+        checker = context.getBean(PrescriptionChecker.class);
+        audit = context.getBean(AuditLogger.class);
     }
 
-    /** GET /check - show the empty form. */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.setAttribute("medicineNames", loadMedicineNames());
-        request.setAttribute("currentMedicineNames", List.of());
-        request.getRequestDispatcher(CHECK_JSP).forward(request, response);
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        req.setAttribute("currentMedicineNames", List.of());
+        showForm(req, res);
     }
 
-    /** POST /check - run the dose + interaction checks and show the outcome. */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        List<String> medicineNames = loadMedicineNames();
-        request.setAttribute("medicineNames", medicineNames);
-
-        if (!interactionGraphLoader.isReady()) {
-            request.setAttribute("errorMessage", "Interaction data is still loading - please try again shortly.");
-            request.getRequestDispatcher(CHECK_JSP).forward(request, response);
-            return;
-        }
-
-        String newMedicineName = request.getParameter("newMedicineName");
-        String[] selectedCurrentMedicines = request.getParameterValues("currentMedicineNames");
-        List<String> currentMedicineNames = selectedCurrentMedicines == null
-                ? List.of() : Arrays.asList(selectedCurrentMedicines);
-
-        request.setAttribute("newMedicineName", newMedicineName);
-        request.setAttribute("dose", request.getParameter("dose"));
-        request.setAttribute("timesPerDay", request.getParameter("timesPerDay"));
-        request.setAttribute("currentMedicineNames", currentMedicineNames);
-
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        String[] selected = req.getParameterValues("currentMedicineNames");
+        List<String> current = selected == null ? List.of() : Arrays.asList(selected);
+        req.setAttribute("currentMedicineNames", current);
+        String name = req.getParameter("newMedicineName");
         try {
-            double dose = Double.parseDouble(request.getParameter("dose"));
-            int timesPerDay = Integer.parseInt(request.getParameter("timesPerDay"));
-
-            Medicine newMedicine = findMedicine(newMedicineName);
-            List<Medicine> currentMedicines = new ArrayList<>();
-            for (String name : currentMedicineNames) {
-                currentMedicines.add(findMedicine(name));
+            double dose;
+            int times;
+            List<String> allergies;
+            try {
+                dose = Double.parseDouble(req.getParameter("dose"));
+                times = Integer.parseInt(req.getParameter("timesPerDay"));
+                allergies = PatientInput.parseAllergies(req.getParameter("allergies"));
+            } catch (IllegalArgumentException | NullPointerException e) {
+                audit.log(null, name, "INVALID_INPUT");
+                throw new IllegalArgumentException("Enter valid allergies, dose and whole-number times per day.");
             }
-
-            newMedicine.validateDose(dose, timesPerDay);
-            Medicine.getKnownInteractions().checkPrescription(newMedicine, currentMedicines);
-
-            request.setAttribute("status", PrescriptionCheckStatus.SAFE);
-        } catch (NumberFormatException | UnknownMedicineException e) {
-            request.setAttribute("errorMessage", "Please enter a valid dose, times per day, and medicine name.");
-            request.getRequestDispatcher(CHECK_JSP).forward(request, response);
-            return;
-        } catch (OverdoseRiskException e) {
-            request.setAttribute("status", PrescriptionCheckStatus.OVERDOSE_RISK);
-            request.setAttribute("message", e.getMessage());
-        } catch (DangerousCombinationException e) {
-            request.setAttribute("status", PrescriptionCheckStatus.DANGEROUS_COMBINATION);
-            request.setAttribute("message", e.getMessage());
-            request.setAttribute("severity", e.getSeverity());
+            PrescriptionCheckResponse result = checker.check(name, dose, times, current, allergies, null);
+            req.setAttribute("newMedicineName", name);
+            req.setAttribute("dose", dose); req.setAttribute("timesPerDay", times);
+            req.setAttribute("status", result.status()); req.setAttribute("message", result.message());
+            req.setAttribute("severity", result.severity());
+            req.getRequestDispatcher("/WEB-INF/jsp/result.jsp").forward(req, res);
+        } catch (DataNotReadyException e) {
+            res.setStatus(503); req.setAttribute("errorMessage", e.getMessage()); showForm(req, res);
+        } catch (IllegalArgumentException | UnknownMedicineException e) {
+            res.setStatus(400); req.setAttribute("errorMessage", e.getMessage()); showForm(req, res);
         }
-
-        request.getRequestDispatcher(RESULT_JSP).forward(request, response);
     }
 
-    private List<String> loadMedicineNames() {
-        List<String> names = new ArrayList<>();
-        for (MedicineDocument doc : medicineRepository.findAll()) {
-            names.add(doc.getName());
-        }
-        Collections.sort(names);
-        return names;
-    }
-
-    private Medicine findMedicine(String name) {
-        return medicineRepository.findByNameIgnoreCase(name)
-                .orElseThrow(() -> new UnknownMedicineException(name))
-                .toDomain();
+    private void showForm(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        req.setAttribute("medicineNames", medicines.findAll().stream().map(MedicineDocument::getName).sorted().toList());
+        req.getRequestDispatcher("/WEB-INF/jsp/check.jsp").forward(req, res);
     }
 }

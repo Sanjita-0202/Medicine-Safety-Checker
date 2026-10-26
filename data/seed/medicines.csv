@@ -1,29 +1,29 @@
 # DEMO VALUES ONLY: typical-adult single/daily dose maximums, approximated
 # for this project from general knowledge - NOT a clinical reference. Verify
 # against a real drug formulary before relying on these numbers for anything.
-id,name,type,dosageUnit,maxSingleDose,maxDailyDose
-amoxicillin,Amoxicillin,ANTIBIOTIC,mg,1000,3000
-azithromycin,Azithromycin,ANTIBIOTIC,mg,500,500
-ciprofloxacin,Ciprofloxacin,ANTIBIOTIC,mg,750,1500
-doxycycline,Doxycycline,ANTIBIOTIC,mg,100,200
-metronidazole,Metronidazole,ANTIBIOTIC,mg,500,2000
-cephalexin,Cephalexin,ANTIBIOTIC,mg,500,2000
-clindamycin,Clindamycin,ANTIBIOTIC,mg,450,1800
-levofloxacin,Levofloxacin,ANTIBIOTIC,mg,750,750
-ibuprofen,Ibuprofen,PAINKILLER,mg,400,1200
-paracetamol,Paracetamol,PAINKILLER,mg,1000,4000
-aspirin,Aspirin,PAINKILLER,mg,650,4000
-naproxen,Naproxen,PAINKILLER,mg,500,1000
-diclofenac,Diclofenac,PAINKILLER,mg,50,150
-celecoxib,Celecoxib,PAINKILLER,mg,200,400
-tramadol,Tramadol,PAINKILLER,mg,100,400
-ketorolac,Ketorolac,PAINKILLER,mg,10,40
-amlodipine,Amlodipine,ANTIHYPERTENSIVE,mg,10,10
-losartan,Losartan,ANTIHYPERTENSIVE,mg,100,100
-lisinopril,Lisinopril,ANTIHYPERTENSIVE,mg,40,40
-metoprolol,Metoprolol,ANTIHYPERTENSIVE,mg,100,200
-atenolol,Atenolol,ANTIHYPERTENSIVE,mg,100,100
-hydrochlorothiazide,Hydrochlorothiazide,ANTIHYPERTENSIVE,mg,50,50
-valsartan,Valsartan,ANTIHYPERTENSIVE,mg,320,320
-enalapril,Enalapril,ANTIHYPERTENSIVE,mg,20,40
-candesartan,Candesartan,ANTIHYPERTENSIVE,mg,32,32
+id,name,type,dosageUnit,maxSingleDose,maxDailyDose,drugClass
+amoxicillin,Amoxicillin,ANTIBIOTIC,mg,1000,3000,penicillin
+azithromycin,Azithromycin,ANTIBIOTIC,mg,500,500,macrolide
+ciprofloxacin,Ciprofloxacin,ANTIBIOTIC,mg,750,1500,fluoroquinolone
+doxycycline,Doxycycline,ANTIBIOTIC,mg,100,200,tetracycline
+metronidazole,Metronidazole,ANTIBIOTIC,mg,500,2000,nitroimidazole
+cephalexin,Cephalexin,ANTIBIOTIC,mg,500,2000,cephalosporin
+clindamycin,Clindamycin,ANTIBIOTIC,mg,450,1800,lincosamide
+levofloxacin,Levofloxacin,ANTIBIOTIC,mg,750,750,fluoroquinolone
+ibuprofen,Ibuprofen,PAINKILLER,mg,400,1200,NSAID
+paracetamol,Paracetamol,PAINKILLER,mg,1000,4000,anilide
+aspirin,Aspirin,PAINKILLER,mg,650,4000,NSAID
+naproxen,Naproxen,PAINKILLER,mg,500,1000,NSAID
+diclofenac,Diclofenac,PAINKILLER,mg,50,150,NSAID
+celecoxib,Celecoxib,PAINKILLER,mg,200,400,NSAID
+tramadol,Tramadol,PAINKILLER,mg,100,400,opioid
+ketorolac,Ketorolac,PAINKILLER,mg,10,40,NSAID
+amlodipine,Amlodipine,ANTIHYPERTENSIVE,mg,10,10,calcium channel blocker
+losartan,Losartan,ANTIHYPERTENSIVE,mg,100,100,ARB
+lisinopril,Lisinopril,ANTIHYPERTENSIVE,mg,40,40,ACE inhibitor
+metoprolol,Metoprolol,ANTIHYPERTENSIVE,mg,100,200,beta blocker
+atenolol,Atenolol,ANTIHYPERTENSIVE,mg,100,100,beta blocker
+hydrochlorothiazide,Hydrochlorothiazide,ANTIHYPERTENSIVE,mg,50,50,thiazide
+valsartan,Valsartan,ANTIHYPERTENSIVE,mg,320,320,ARB
+enalapril,Enalapril,ANTIHYPERTENSIVE,mg,20,40,ACE inhibitor
+candesartan,Candesartan,ANTIHYPERTENSIVE,mg,32,32,ARB

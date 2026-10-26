@@ -21,6 +21,8 @@ public class PrescriptionDocument {
     private LocalDate date;
     private PrescriptionStatus status;
     private String reason;
+    private String doctorId;
+    private String doctorName;
 
     public PrescriptionDocument() {
     }
@@ -100,4 +102,8 @@ public class PrescriptionDocument {
     public void setReason(String reason) {
         this.reason = reason;
     }
+    public String getDoctorId() { return doctorId; }
+    public void setDoctorId(String doctorId) { this.doctorId = doctorId; }
+    public String getDoctorName() { return doctorName; }
+    public void setDoctorName(String doctorName) { this.doctorName = doctorName; }
 }

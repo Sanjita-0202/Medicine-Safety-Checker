@@ -62,7 +62,14 @@ public class PatientDocument {
     }
 
     public String getGender() {
-        return gender;
+        if (gender == null) { return "Prefer not to say"; }
+        return switch (gender.strip().toUpperCase(java.util.Locale.ROOT)) {
+            case "F", "FEMALE" -> "Female";
+            case "M", "MALE" -> "Male";
+            case "OTHER" -> "Other";
+            case "PREFER NOT TO SAY" -> "Prefer not to say";
+            default -> gender;
+        };
     }
 
     public void setGender(String gender) {
@@ -78,7 +85,7 @@ public class PatientDocument {
     }
 
     public List<String> getAllergies() {
-        return allergies;
+        return allergies == null ? List.of() : allergies;
     }
 
     public void setAllergies(List<String> allergies) {
@@ -86,7 +93,7 @@ public class PatientDocument {
     }
 
     public List<String> getActiveMedicines() {
-        return activeMedicines;
+        return activeMedicines == null ? List.of() : activeMedicines;
     }
 
     public void setActiveMedicines(List<String> activeMedicines) {

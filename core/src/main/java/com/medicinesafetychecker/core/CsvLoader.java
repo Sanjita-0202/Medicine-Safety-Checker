@@ -49,8 +49,8 @@ public final class CsvLoader {
 
     private static Medicine parseMedicine(String line) {
         String[] fields = line.split(",", -1);
-        if (fields.length != 6) {
-            throw new IllegalArgumentException("expected 6 columns, found " + fields.length);
+        if (fields.length != 6 && fields.length != 7) {
+            throw new IllegalArgumentException("expected 6 or 7 columns, found " + fields.length);
         }
         String id = fields[0].strip();
         String name = fields[1].strip();
@@ -59,12 +59,14 @@ public final class CsvLoader {
         double maxSingleDose = Double.parseDouble(fields[4].strip());
         double maxDailyDose = Double.parseDouble(fields[5].strip());
 
-        return switch (type) {
+        Medicine medicine = switch (type) {
             case "ANTIBIOTIC" -> new Antibiotic(id, name, dosageUnit, maxSingleDose, maxDailyDose);
             case "PAINKILLER" -> new Painkiller(id, name, dosageUnit, maxSingleDose, maxDailyDose);
             case "ANTIHYPERTENSIVE" -> new Antihypertensive(id, name, dosageUnit, maxSingleDose, maxDailyDose);
             default -> throw new IllegalArgumentException("unknown medicine type: " + type);
         };
+        if (fields.length == 7) { medicine.setDrugClass(fields[6]); }
+        return medicine;
     }
 
     /** Reads an interactions CSV (medicineNameA,medicineNameB,severity,description). */
@@ -108,9 +110,9 @@ public final class CsvLoader {
 
     private static Severity parseSeverity(String csvSeverity) {
         return switch (csvSeverity.toUpperCase(Locale.ROOT)) {
-            case "MAJOR" -> Severity.SEVERE;
+            case "MAJOR", "SEVERE" -> Severity.SEVERE;
             case "MODERATE" -> Severity.MODERATE;
-            case "MINOR" -> Severity.LOW;
+            case "MINOR", "LOW" -> Severity.LOW;
             default -> throw new IllegalArgumentException("unknown severity: " + csvSeverity);
         };
     }
@@ -152,7 +154,7 @@ public final class CsvLoader {
 
     /** Quotes a CSV field if it contains a comma or a double quote. */
     public static String escapeCsvField(String value) {
-        if (value.contains(",") || value.contains("\"")) {
+        if (value.contains(",") || value.contains("\"") || value.contains("\n") || value.contains("\r")) {
             return "\"" + value.replace("\"", "\"\"") + "\"";
         }
         return value;
