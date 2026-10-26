@@ -11,7 +11,7 @@ and MongoDB for storage.
   JSP/Servlet website UI (`PrescriptionServlet` at `/check`)
 
 ## Requirements
-- Java 21+
+- Java 25+
 - A MongoDB instance (Atlas or local)
 
 No local Maven install is required — use the included wrapper (`mvnw` /

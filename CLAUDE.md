@@ -5,7 +5,7 @@ dosages and known drug-drug interactions.
 
 ## Stack
 
-- **Java 21**, built with **Maven** (multi-module)
+- **Java 25**, built with **Maven** (multi-module)
 - `core` — plain Java OOP domain classes (Medicine, Interaction, dosage rules).
   No framework dependencies; this is the module to point at when explaining
   the OOP design in the viva.
